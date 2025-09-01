@@ -1,0 +1,84 @@
+var express = require("express")
+global.app = express()
+var bodyParser = require("body-parser")
+const mongoose = require("mongoose")
+global.config = require("./config.js").config
+global.sha256 = require("sha256")
+global.nodemailer = require("nodemailer")
+const cors = require("cors")
+const session = require("express-session")
+const MongoStore = require("connect-mongo")
+
+// -------------------- MIDDLEWARES -------------------- //
+
+// Body parser
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: true }))
+
+// CORS manual
+app.use((req, res, next) => {
+  const origin = req.headers.origin
+
+  if (config.listablanca.includes(origin)) {
+    res.setHeader("Access-Control-Allow-Origin", origin)
+    res.setHeader("Access-Control-Allow-Credentials", "true")
+  }
+
+  res.setHeader("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS")
+  res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
+
+  if (req.method === "OPTIONS") {
+    return res.sendStatus(204)
+  }
+
+  next()
+})
+
+// CORS con paquete cors
+app.use(cors({
+  origin: function (origin, callback) {
+    console.log("Origen:", origin)
+    if (!origin) return callback(null, true)
+    if (config.listablanca.indexOf(origin) === -1) {
+      return callback("Error de Cors No hay permisos", false)
+    } else {
+      return callback(null, true)
+    }
+  },
+  credentials: true
+}))
+
+// -------------------- CONEXIÓN MONGO -------------------- //
+mongoose.connect("mongodb://127.0.0.1:27017/" + config.bd).then(() => {
+  console.log("Conexion correcta a Mongo")
+
+  //conexión, iniciar la sesión
+  app.use(session({
+    secret: config.clavesecreta,
+    resave: true,
+    saveUninitialized: true,
+    store: MongoStore.create({
+      client: mongoose.connection.getClient(),
+      dbName: config.bd + "Sesiones",
+      collectionName: "Sessions",
+      ttl: config.expiracion
+    }),
+    cookie: {
+      maxAge: config.expiracion,
+      httpOnly: true
+    },
+    name: "Cookieapp",
+    rolling: true
+  }))
+
+  // -------------------- RUTAS -------------------- //
+  require("./rutas.js")
+
+  // -------------------- PARA LEVANTAR EL SERVIDOR -------------------- //
+  app.listen(config.puerto, function () {
+    console.log("Servidor Funcionando por el puerto " + config.puerto)
+  })
+
+}).catch((error) => {
+  console.log(error)
+})
