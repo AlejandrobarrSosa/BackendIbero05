@@ -24,15 +24,11 @@ usuariosController.Guardar = function (request, response) {
   if (post.email == undefined || post.email == null || post.email == "") {
     response
       .status(200)
-      .json({ state: false, mensaje: "el campo email es obligatorio" });
+      .json({state: false, mensaje: "el campo email es obligatorio" });
     return false;
   }
 
-  if (
-    post.password == undefined ||
-    post.password == null ||
-    post.password == ""
-  ) {
+  if (post.password == undefined ||post.password == null || post.password == "") {
     response
       .status(200)
       .json({ state: false, mensaje: "el campo password es obligatorio" });
@@ -51,6 +47,8 @@ usuariosController.Guardar = function (request, response) {
 
   // Validar si ya existe correo
   usuariosModel.ExisteCorreo(post, function (existe) {
+
+
     if (existe.length == 0) {
       //===========Guardamos===========//
       usuariosModel.Guardar(post, function (respuesta) {
@@ -61,10 +59,7 @@ usuariosController.Guardar = function (request, response) {
         }
       });
     } else {
-      response.json({
-        state: false,
-        mensaje: "El Email ya Existe Intente con otro",
-      });
+      response.json({ state: false, mensaje: "El Email ya Existe Intente con otro", });
     }
   });
 };
@@ -139,11 +134,7 @@ usuariosController.Actualizar = function (request, response) {
   }
 
   if (!mongoose.Types.ObjectId.isValid(post._id)) {
-    response.status(200).json({
-      state: false,
-      mensaje:
-        "El campo _id válido debe ser maximo de 24 caracteres hexadecimales",
-    });
+    response.status(200).json({state: false,mensaje:"El campo _id válido debe ser maximo de 24 caracteres hexadecimales",});
     return false;
   }
 
@@ -235,6 +226,8 @@ usuariosController.Eliminar = function (request, response) {
   // })
 };
 
+
+
 //obligatorias de usuario
 usuariosController.Registrar = function (request, response) {
   var post = {
@@ -319,15 +312,11 @@ usuariosController.Registrar = function (request, response) {
 
           transporter.sendMail(mailOptions, (error, info) => {
             if (error) {
-              console.log(error);
+              // console.log(error);
               response.json({ state: false, mensaje: "Error enviando correo" });
             } else {
-              console.log(info);
-              response.json({
-                state: true,
-                mensaje:
-                  "Usuario Registrado Correctamente. Verifique su bandeja",
-              });
+              // console.log(info);
+              response.json({state: true,mensaje:"Usuario Registrado Correctamente. Verifique su bandeja",});
             }
           });
         } else {
@@ -338,10 +327,40 @@ usuariosController.Registrar = function (request, response) {
         }
       });
     } else {
-      response.json({
-        state: false,
-        mensaje: "Correo Electronico en Uso Intente con Otro",
-      });
+      response.json({state: false,mensaje: "Correo Electronico en Uso Intente con Otro",});
+    }
+  });
+};
+
+usuariosController.Activar = function (request, response) {
+  var post = {
+    email: request.body.email,
+    codigo: request.body.codigo,
+  };
+
+  if (
+    post.email == undefined ||
+    post.email == null ||
+    post.email.trim() == ""
+  ) {
+    response.json({ state: false, mensaje: "El campo email es obligatorio" });
+    return false;
+  }
+
+  if (
+    post.codigo == undefined ||
+    post.codigo == null ||
+    post.codigo.trim() == ""
+  ) {
+    response.json({ state: false, mensaje: "El campo codigo es obligatorio" });
+    return false;
+  }
+
+  usuariosModel.Activar(post, function (respuesta) {
+    if (respuesta == null) {
+      response.json({ state: false, mensaje: "Codigo de Activacion Invalido" });
+    } else {
+      response.json({ state: true, mensaje: "Cuenta Activada Correctamente" });
     }
   });
 };
@@ -365,10 +384,7 @@ usuariosController.Login = function (request, response) {
     post.password == null ||
     post.password.trim() == ""
   ) {
-    response.json({
-      state: false,
-      mensaje: "El campo password es obligatorio",
-    });
+    response.json({ state: false,mensaje: "El campo password es obligatorio", });
     return false;
   }
 
@@ -411,36 +427,18 @@ usuariosController.Login = function (request, response) {
   });
 };
 
-usuariosController.Activar = function (request, response) {
+usuariosController.MisDatos = function (request, response) {
   var post = {
-    email: request.body.email,
-    codigo: request.body.codigo,
+    _id: request.session._id,
   };
 
-  if (
-    post.email == undefined ||
-    post.email == null ||
-    post.email.trim() == ""
-  ) {
-    response.json({ state: false, mensaje: "El campo email es obligatorio" });
+  if (post._id == undefined || post._id == null || post._id == "") {
+    response.json({ state: false,mensaje: "Debe Iniciar Sesion para cargar los datos",});
     return false;
   }
 
-  if (
-    post.codigo == undefined ||
-    post.codigo == null ||
-    post.codigo.trim() == ""
-  ) {
-    response.json({ state: false, mensaje: "El campo codigo es obligatorio" });
-    return false;
-  }
-
-  usuariosModel.Activar(post, function (respuesta) {
-    if (respuesta == null) {
-      response.json({ state: false, mensaje: "Codigo de Activacion Invalido" });
-    } else {
-      response.json({ state: true, mensaje: "Cuenta Activada Correctamente" });
-    }
+  usuariosModel.CargarId(post, function (respuesta) {
+    response.json(respuesta);
   });
 };
 
@@ -493,10 +491,10 @@ usuariosController.SolicitudRecuperarPass = function (request, response) {
 
     transporter.sendMail(mailOptions, (error, info) => {
       if (error) {
-        console.log(error);
+        // console.log(error);
         response.json({ state: false, mensaje: "Error enviando correo" });
       } else {
-        console.log(info);
+        // console.log(info);
         response.json({
           state: true,
           mensaje:
@@ -622,22 +620,5 @@ usuariosController.ActualizarMisDatos = function (request, response) {
   });
 };
 
-usuariosController.MisDatos = function (request, response) {
-  var post = {
-    _id: request.session._id,
-  };
-
-  if (post._id == undefined || post._id == null || post._id == "") {
-    response.json({
-      state: false,
-      mensaje: "Debe Iniciar Sesion para cargar los datos",
-    });
-    return false;
-  }
-
-  usuariosModel.CargarId(post, function (respuesta) {
-    response.json(respuesta);
-  });
-};
 
 module.exports.usuariosController = usuariosController;

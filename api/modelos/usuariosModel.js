@@ -41,7 +41,7 @@ usuariosModel.Guardar =       function(post, callback){
     instancia.nombre = post.nombre
     instancia.email = post.email
     instancia.password = post.password
-    instancia.rol = post.rol  // Cliente - Administrador "Cliente"
+    instancia.rol = post.rol  // Cliente - Administrador
     instancia.estado = 'Activo'
 
 
@@ -49,7 +49,7 @@ usuariosModel.Guardar =       function(post, callback){
         console.log(respuesta)
         return callback({state:true})
     }).catch((error) => {
-        console.log(error)
+        // console.log(error)
         return callback({state:false})
     })
 
@@ -64,7 +64,7 @@ usuariosModel.CargarTodas =   function(post, callback){
 
 usuariosModel.CargarId = function (post, callback) {
     Mymodel.find({_id:post._id}, { __v: 0, password: 0 }).then((respuesta) => {
-        console.log(respuesta)
+        // console.log(respuesta)
         return callback({datos:respuesta})
     })
 
@@ -81,7 +81,7 @@ usuariosModel.Actualizar =    function(post, callback){
         }).then((respuesta) => {
            return callback({state:true}) 
         }).catch((error) => {
-            console.log(error)
+            // console.log(error)
             return callback({state:false})
         })
     
@@ -92,7 +92,7 @@ usuariosModel.Eliminar =      function(post, callback){
     Mymodel.findOneAndDelete({_id:post._id}).then((respuesta) => {
            return callback({state:true}) 
         }).catch((error) => {
-            console.log(error)
+            // console.log(error)
             return callback({state:false})
         })
 
@@ -106,7 +106,7 @@ usuariosModel.ActualizarPass =    function(post, callback){
         }).then((respuesta) => {
            return callback({state:true}) 
         }).catch((error) => {
-            console.log(error)
+            // console.log(error)
             return callback({state:false})
         })
     
@@ -119,7 +119,7 @@ usuariosModel.ActualizarMisDatos =    function(post, callback){
         }).then((respuesta) => {
            return callback({state:true}) 
         }).catch((error) => {
-            console.log(error)
+            // console.log(error)
             return callback({state:false})
         })
     
@@ -141,7 +141,7 @@ usuariosModel.Registrar =     function(post, callback){
         console.log(respuesta)
         return callback({state:true})
     }).catch((error) => {
-        console.log(error)
+        // console.log(error)
         return callback({state:false})
     })
 
@@ -151,7 +151,7 @@ usuariosModel.SolicitudRecuperarPass = function(post, callback){
     Mymodel.findOneAndUpdate({email:post.email}, {codigorec: post.codigo}).then((respuesta) => {
         return callback({state:true})
     }).catch((error) => {
-        console.log(error)
+        // console.log(error)
         return callback({state:false})
     })
 }
@@ -160,7 +160,7 @@ usuariosModel.RecuperarPass = function(post, callback){
     Mymodel.findOneAndUpdate({email:post.email, codigorec:post.codigorec}, {password:post.password, codigorec:""}).then((respuesta) => {
         return callback(respuesta)
     }).catch((error) => {
-        console.log(error)
+        // console.log(error)
         return callback({state:false})
     })
 }
@@ -181,5 +181,5 @@ usuariosModel.Login =         function(post, callback){
 
 
 
-
+usuariosModel.Mymodel = Mymodel 
 module.exports.usuariosModel = usuariosModel

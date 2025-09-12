@@ -76,5 +76,5 @@ serviciosModel.Eliminar = function(post, callback){
 }
 
 
-
+serviciosModel.Mymodel = Mymodel
 module.exports.serviciosModel = serviciosModel

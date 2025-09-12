@@ -131,6 +131,11 @@ productosController.CargarId = function (request, response) {
     return false;
   }
 
+  if(post._id.toString().length != 24){
+        response.json({state:false, mensaje:"El Id Es Invalido"})
+        return false
+    }
+
   productosModel.CargarId(post, function (respuesta) {
     response.json(respuesta);
   });
