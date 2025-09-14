@@ -118,7 +118,7 @@ app.get("/productos/CargarTodasCliente",  function (request, response) {
 
 
 
-
+//==========servicios============//
 var serviciosController = require("./api/controladores/serviciosController.js").serviciosController
 
 app.post("/servicios/Guardar", function (request, response) {
@@ -144,7 +144,7 @@ app.delete("/servicios/Eliminar", function (request, response) {
 
 
 
-
+//===========clientes============//
 var clientesController = require("./api/controladores/clientesController.js").clientesController
 
 app.post("/clientes/Guardar", function (request, response) {
