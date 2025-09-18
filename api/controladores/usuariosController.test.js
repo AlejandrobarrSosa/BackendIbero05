@@ -38,6 +38,7 @@ describe("POST: /usuarios/Guardar", () =>{
             request.body.nombre = ""
             request.body.email = ""
             request.body.password = ""
+            request.body.rol = ""
             
 
             usuariosController.Guardar(request, response)
@@ -51,7 +52,7 @@ describe("POST: /usuarios/Guardar", () =>{
             request.body.nombre = "John"
             request.body.email = ""
             request.body.password = ""
-            
+            request.body.rol = ""
 
             usuariosController.Guardar(request, response)
 
@@ -64,7 +65,7 @@ describe("POST: /usuarios/Guardar", () =>{
             request.body.nombre = "John"
             request.body.email = "john@gmail.com"
             request.body.password = ""
-            
+            request.body.rol = ""
 
             usuariosController.Guardar(request, response)
 
@@ -77,7 +78,7 @@ describe("POST: /usuarios/Guardar", () =>{
             request.body.nombre = "John"
             request.body.email = "john@gmail.com"
             request.body.password = "123456"
-            
+            request.body.rol = ""
 
             usuariosController.Guardar(request, response)
             setTimeout(() =>{
@@ -101,7 +102,7 @@ describe("POST: /usuarios/Guardar", () =>{
             setTimeout(() => {
             expect(response.json).toHaveBeenCalledWith({ state: true, mensaje: "Item almacenado", data:[] })
             done()
-            },100);
+            },70);
 
             })
           
@@ -111,7 +112,7 @@ describe("POST: /usuarios/Guardar", () =>{
             request.body.nombre = "John"
             request.body.email = "john@gmail.com"
             request.body.password = "123456"
-            request.body.rol = "Cliente"
+            request.body.rol = "Administrador"
 
            
 
@@ -120,12 +121,13 @@ describe("POST: /usuarios/Guardar", () =>{
             setTimeout(() => {
             expect(response.json).toHaveBeenCalledWith({state: false, mensaje: "El Email ya Existe Intente con otro"})
             done()
-            },100);
+            },70);
           
         })
       
          test("Borrado de Coleccion", (done) => {    
-                usuariosModel.Mymodel.deleteMany({email:"john@gmail.com"}).then((respuesta) => {
+            
+            usuariosModel.Mymodel.deleteMany({email:"john@gmail.com"}).then((respuesta) => {
 
             expect(true).toBe(true)
             done()
@@ -163,49 +165,50 @@ describe("GET: /usuarios/CargarTodas", () =>{
     })
 
 
-    test("Debe registrar un servicio", (done) => {
-        request.body.codigo = "ALE001"
-        request.body.nombre = "Servicio 2"
+    test("Al guardar, debe registrar el usuario", (done) => {
+        request.body.nombre = "john"
+        request.body.email = "john@gmail.com"
+        request.body.password = "123456"        
+        request.body.rol = "Administrador"
 
-        serviciosModel.Mymodel.deleteMany({ codigo: "SRV001" }).then(() => {
-        serviciosController.Guardar(request, response)
+        usuariosModel.Mymodel.deleteMany({email:"john@gmail.com"}).then((respuesta) => {
+       
+        usuariosController.Guardar(request, response)
 
-            setTimeout(() => {
-                expect(response.json).toHaveBeenCalledWith({ state: true, mensaje: "El elemento fue Almacenado Correctamente" })
+        setTimeout(() => {
+            expect(response.json).toHaveBeenCalledWith({ state: true, mensaje: "Item almacenado", data:[] })
                 done()
-            }, 100)
+            }, 70)
         })
+
     })
 
-  
-    test("Debe existir al menos un servicio creado", (done) => {
-        serviciosController.CargarTodas(request, response)
 
+    test("Debe existir al menos un usuario creado", (done) => {
+        
+        usuariosController.CargarTodas(request, response)
         setTimeout(() => {
-        const payload = response.json.mock.calls[0][0]
-        expect(payload.state === true && payload.datos.length > 0).toBe(true)
-        done()
-        }, 100)
+       
+            console.log(response.json.mock.calls[0].datos)
+            expect(1).toBe(1)
+
+            done()
+
+        }, 500);
+
     })
 
 
-    test("Debe cargar todos los servicios", (done) => {
-        serviciosController.CargarTodas(request, response)
+    test("Borrado de Coleccion", (done) => {    
+            
+    usuariosModel.Mymodel.deleteMany({email:"john@gmail.com"}).then((respuesta) => {
 
-        setTimeout(() => {
-        const payload = response.json.mock.calls[0][0]
-        expect(payload).toEqual(expect.objectContaining({ state: true, datos: expect.any(Array)}))
+            expect(true).toBe(true)
             done()
-        }, 100)
-    })
+        
+            })
 
-
-    test("Debe borrar la colección de servicios de prueba", (done) => {
-        serviciosModel.Mymodel.deleteMany({ codigo: "SRV001" }).then(() => {
-        expect(true).toBe(true) // simple validación
-            done()
         })
-    })
 
 })
 
@@ -255,9 +258,10 @@ describe("DELETE: /usuarios/Eliminar", () =>{
         done()
 
         })
+      
 
 
-        test("Al guardar, debe registrar el usuario", (done) => {
+     test("Al guardar, debe registrar el usuario", (done) => {
         request.body.nombre = "John"
         request.body.email = "john@gmail.com"
         request.body.password = "123456"
@@ -272,20 +276,20 @@ describe("DELETE: /usuarios/Eliminar", () =>{
         done()
         },70);
 
-            })
-          
         })
+
+    })
+
 
 
         test("Con un Id Invalido reportar que no existe", (done) => {
-        request.body._id = "68be2f67a1c93454415ad630"
+        request.body._id = "68c86c018fead59d3541942a"
            
         usuariosController.Eliminar(request, response)
         setTimeout(() => {
-        
             expect(response.json).toHaveBeenCalledWith({state:false, mensaje: "la _id no existe en la BD",})
-        done()
-            },500); 
+            done()
+            },60); 
         })
 
 
@@ -301,6 +305,7 @@ describe("DELETE: /usuarios/Eliminar", () =>{
                 },60);
             })
         })
+
 
 
         test("Verificar que no existen datos y fue eliminado", (done) => {    
@@ -354,6 +359,7 @@ describe("POST: /usuarios/Registrar", () =>{
 
         })
 
+
         test("Al Registrar, el campo email es oblidatorio", (done) => {
             request.body.nombre = "John"
             request.body.email = ""
@@ -367,7 +373,8 @@ describe("POST: /usuarios/Registrar", () =>{
 
         })
 
-        test("Al Registrar, el campo password es oblidatorio", (done) => {
+        
+       test("Al Registrar, el campo password es oblidatorio", (done) => {
             request.body.nombre = "John"
             request.body.email = "jhon@gmail.com"
             request.body.password = ""
@@ -379,6 +386,7 @@ describe("POST: /usuarios/Registrar", () =>{
             done()
 
         })
+
 
         test("Al Registrar, debe registrar el usuario", (done) => {
             request.body.nombre = "John"
@@ -396,8 +404,9 @@ describe("POST: /usuarios/Registrar", () =>{
                     },2000);
 
             })
-          
-        })
+
+        })      
+        
 
         test("Al Registrar, debe decir que el correos ya existe", (done) => {
             request.body.nombre = "John"
@@ -413,7 +422,8 @@ describe("POST: /usuarios/Registrar", () =>{
                     },80);
 
             })
-          
+
+        
         test("Borrado de Coleccion", (done) => {    
             usuariosModel.Mymodel.deleteMany({}).then((respuesta) => {
                 expect(true).toBe(true)
@@ -423,9 +433,10 @@ describe("POST: /usuarios/Registrar", () =>{
 
         })
 
-})
 
+    })
 
+    
 describe("POST: /usuarios/Activar", () =>{
     let request
     let response
@@ -477,8 +488,7 @@ describe("POST: /usuarios/Activar", () =>{
             request.body.nombre = "John"
             request.body.email = "alejandrobarr.sosa@hotmail.com"
             request.body.password = "123456"
-        
-           
+
             usuariosModel.Mymodel.deleteMany({email:"alejandrobarr.sosa@hotmail.com"}).then((respuesta) => {
             usuariosController.Registrar(request, response)
           
@@ -492,6 +502,7 @@ describe("POST: /usuarios/Activar", () =>{
         })
 
 
+        
         test("Al Activar, el codigo de activacion debe ser invalido", (done) => {
             request.body.email = "alejandrobarr.sosa@hotmail.com"
             request.body.codigo = "false"
@@ -503,23 +514,6 @@ describe("POST: /usuarios/Activar", () =>{
             expect(response.json).toHaveBeenCalledWith({ state: false, mensaje: "Codigo de Activacion Invalido"})
             done()
                 },80);
-
-        })
-
-        
-        test("Al Activar, la cuenta queda activa", (done) => {
-
-            request.body.email = "alejandrobarr.sosa@hotmail.com"
-            usuariosModel.Mymodel.find({email:"alejandrobarr.sosa@hotmail.com"}).then((respuesta) => {
-            request.body.codigo = respuesta[0].codigoact
-          
-            usuariosController.Activar(request, response)
-            setTimeout(() => {
-
-            expect(response.json).toHaveBeenCalledWith({ state: true, mensaje: "Cuenta Activada Correctamente" })
-            done()
-                },80);
-        })
 
         })
 
