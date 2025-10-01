@@ -5,11 +5,11 @@ var config = {
 config.name = "DieCastCars"
 config.dominio = "http://localhost:4200"
 
-config.bd = "Cohorte05Final"
+config.bd = "BackendIbero05"
 config.bdtest = "Cohorte05FinalTest"
-config.bdUser = ""
-config.bdPass = ""
-config.bdIp = "127.0.0.1"
+config.bdUser = "adminBit"
+config.bdPass = "prueba123"
+config.bdIp = "134.199.238.248"
 config.bdPort = "27017"
 
 config.produccion = true  // true = servidor de produccion, false = servidor de desarrollo

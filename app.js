@@ -88,21 +88,23 @@ mongoose.connect(conexion).then((respuesta)=>{
 
 
 
-
   //conexión, iniciar la sesión
   app.use(session({
     secret: config.clavesecreta,
     resave: true,
     saveUninitialized: true,
     store: MongoStore.create({
-      client: mongoose.connection.getClient(),
+      // client: mongoose.connection.getClient(),
+      mongoUrl: conexion + "Sesiones",
       dbName: config.bd + "Sesiones",
       collectionName: "Sessions",
-      ttl: config.expiracion
+      ttl: config.expiracion,
+      // mongoOptions: {
+      // authSource: config.bd 
+      // }
     }),
     cookie: {
-      maxAge: config.expiracion,
-      httpOnly: true
+      maxAge: config.expiracion, httpOnly: true
     },
     name: "Cookieapp",
     rolling: true
