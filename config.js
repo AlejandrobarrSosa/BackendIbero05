@@ -7,6 +7,13 @@ config.dominio = "http://localhost:4200"
 
 config.bd = "Cohorte05Final"
 config.bdtest = "Cohorte05FinalTest"
+config.bdUser = ""
+config.bdPass = ""
+config.bdIp = "127.0.0.1"
+config.bdPort = "27017"
+
+config.produccion = true  // true = servidor de produccion, false = servidor de desarrollo
+
 config.puerto = 3000
 config.clavesecreta = "jldsajxucmpqwocmm8034043m80c093,0498xm34m0m1m840x4cnc94x84lkjklsdajoi"
 config.expiracion = 60000*5
@@ -21,7 +28,8 @@ config.listablanca = [
     "http://localhost:4200",
     "http://localhost:3000",
     "http://192.168.20.26:3000",
-    "http://localhost:9876",
+    "http://localhost:9876"
+    
     
 ]
 

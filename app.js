@@ -8,6 +8,15 @@ global.nodemailer = require("nodemailer")
 const cors = require("cors")
 const session = require("express-session")
 const MongoStore = require("connect-mongo")
+const path = require('path');
+var dirname = path.dirname(__filename);
+// global.multer = require("multer")
+// global.PDFDocument = require("pdfkit")
+// global.fs = require("fs")
+// global.json2xls = require("json2xls")
+
+
+
 
 // -------------------- MIDDLEWARES -------------------- //
 
@@ -48,9 +57,37 @@ app.use(cors({
   credentials: true
 }))
 
+
+app.use('/', express.static(path.join(__dirname, 'dist/frontend/browser')));
+app.get(/.*/, (req, res) => {
+  res.sendFile(path.join(dirname, 'dist/frontend/browser/index.html'));
+});
+global.path = require("path")
+global.appRoot = path.resolve(__dirname)
+
+
 // -------------------- CONEXIÓN MONGO -------------------- //
-mongoose.connect("mongodb://127.0.0.1:27017/" + config.bd).then(() => {
-  console.log("Conexion correcta a Mongo")
+
+// mongoose.connect("mongodb://127.0.0.1:27017/" + config.bd).then((respuesta) => {
+//   console.log("Conexion correcta a Mongo")
+// }).catch((error) => {
+//   console.log(error)
+// })
+
+
+var conexion = "mongodb://" + config.bdIp + ":" + config.bdPort +  "/" + config.bd
+
+if(config.produccion == true){
+  conexion = "mongodb://" + config.bdUser + ":" + config.bdPass + '@' + config.bdIp + ":" + config.bdPort +  "/" + config.bd
+}
+mongoose.connect(conexion).then((respuesta)=>{
+    console.log("Conexion correcta a mongo")
+}).catch((error) => {
+    console.log(error)
+})
+
+
+
 
   //conexión, iniciar la sesión
   app.use(session({
@@ -79,6 +116,3 @@ mongoose.connect("mongodb://127.0.0.1:27017/" + config.bd).then(() => {
     console.log("Servidor Funcionando por el puerto " + config.puerto)
   })
 
-}).catch((error) => {
-  console.log(error)
-})
