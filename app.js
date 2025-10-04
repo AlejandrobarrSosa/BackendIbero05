@@ -38,10 +38,13 @@ app.use((req, res, next) => {
   next();
 });
 
-
+// Body parser
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: true }))
 require("./rutas.js")(app);
 
-mongoose.connect("mongodb://" + config.bdUser + ":" + config.bdPass + "@" + config.bdIp + ":" + config.bdPort + "/" + config.bd + "?authSource=admin&directConnection=true").then((respuesta) => {
+mongoose.connect("mongodb://" + config.bdUser + ":" + config.bdPass + "@" + config.bdIp + ":" + config.bdPort + "/" + config.bd + "?authSource=admin&directConnection=true")
+.then((respuesta) => {
     console.log("Conexion correcta a Mongo")
 }).catch((error) => {
     console.log(error)
@@ -64,10 +67,6 @@ app.use(cors({
 
 
 // -------------------- MIDDLEWARES -------------------- //
-
-// Body parser
-app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({ extended: true }))
 
 // CORS manual
 app.use((req, res, next) => {
