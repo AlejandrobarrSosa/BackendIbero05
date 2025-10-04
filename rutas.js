@@ -160,17 +160,6 @@ module.exports = function (app) {
     serviciosController.CargarTodas(request, response);
   });
 
-  //   exports.CargarTodas = function (req, res) {
-  //     Producto.find({}, (err, result) => {
-  //       if (err) {
-  //         res
-  //           .status(500)
-  //           .json({ error: "Error al cargar productos", detalles: err });
-  //       } else {
-  //         res.json(result); // <-- aquí Angular interpreta correctamente
-  //       }
-  //     });
-  //   };
 
   app.get("/api/servicios/CargarId/:_id", function (request, response) {
     serviciosController.CargarId(request, response);
@@ -196,18 +185,6 @@ module.exports = function (app) {
     clientesController.CargarTodas(request, response);
   });
 
-  //   exports.CargarTodas = function (req, res) {
-  //     Producto.find({}, (err, result) => {
-  //       if (err) {
-  //         res
-  //           .status(500)
-  //           .json({ error: "Error al cargar productos", detalles: err });
-  //       } else {
-  //         res.json(result); // <-- aquí Angular interpreta correctamente
-  //       }
-  //     });
-  //   };
-
   app.get("/api/clientes/CargarId/:_id", function (request, response) {
     clientesController.CargarId(request, response);
   });
@@ -231,17 +208,6 @@ module.exports = function (app) {
     carouselController.CargarTodas(request, response);
   });
 
-  //   exports.CargarTodas = function (req, res) {
-  //     Producto.find({}, (err, result) => {
-  //       if (err) {
-  //         res
-  //           .status(500)
-  //           .json({ error: "Error al cargar productos", detalles: err });
-  //       } else {
-  //         res.json(result); // <-- aquí Angular interpreta correctamente
-  //       }
-  //     });
-  //   };
 
   app.get("/api/carousel/CargarId/:_id", function (request, response) {
     carouselController.CargarId(request, response);
