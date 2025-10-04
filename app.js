@@ -1,5 +1,5 @@
 var express = require("express")
-global.app = express()
+const app = express()
 var bodyParser = require("body-parser")
 const mongoose = require("mongoose")
 global.config = require("./config.js").config
