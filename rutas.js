@@ -5,7 +5,6 @@ var security = require("./midleware/security.js").security
 const express = require("express");
 const app = express();
 
-const { productosController } = require("./controladores/productosController");
 
 
 //=====(solo admin)=====//
