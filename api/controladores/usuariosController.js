@@ -175,7 +175,6 @@ usuariosController.Eliminar = function (request, response) {
     _id: request.body._id,
   };
 
-  console.log("ID recibido:", post._id, "longitud:", post._id?.length);
 
   if ([undefined, null, ""].indexOf(post._id) >= 0) {
     response

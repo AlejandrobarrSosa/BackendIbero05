@@ -41,7 +41,7 @@ app.use((req, res, next) => {
 // Body parser
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
-require("./rutas.js")(app);
+
 
 mongoose.connect("mongodb://" + config.bdUser + ":" + config.bdPass + "@" + config.bdIp + ":" + config.bdPort + "/" + config.bd + "?authSource=admin&directConnection=true")
 .then((respuesta) => {
@@ -116,7 +116,8 @@ if(config.produccion == true){
     name: "Cookieapp",
     rolling: true
   }))
-
+  
+  require("./rutas.js")(app);
 
 app.use('/', express.static(path.join(__dirname, 'dist/frontend/browser')));
 app.get(/.*/, (req, res) => {
@@ -128,4 +129,3 @@ app.get(/.*/, (req, res) => {
   app.listen(config.puerto, function () {
     console.log("Servidor Funcionando por el puerto " + config.puerto)
   })
-
