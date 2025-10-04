@@ -10,7 +10,7 @@ config.dominio = "http://alejo.tutorialesjavascript.com"
 
 
 
-config.bd = "Cohorte05Final"
+config.bd = "BackendIbero05"
 config.bdtest = "Cohorte05Final"
 config.bdUser = "adminBit"
 config.bdPass = "prueba123"
