@@ -39,7 +39,7 @@ app.use((req, res, next) => {
 });
 
 
-require("./rutas.js")
+require("./rutas.js")(app);
 
 mongoose.connect("mongodb://127.0.0.1:27017/" + config.bd).then((respuesta) => {
     console.log("Conexion correcta a Mongo")
