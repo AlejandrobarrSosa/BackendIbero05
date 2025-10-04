@@ -36,9 +36,9 @@ config.listablanca = [
     "http://localhost:9876",
     "http://134.199.238.248",
     "http://alejo.tutorialesjavascript.com",
-    "http://134.199.238.248:3000"
-
-    
+    "http://134.199.238.248:3000",
+    'https://alejo.tutorialesjavascript.com',
+    'http://localhost:4200'
 ]
 
 module.exports.config = config
