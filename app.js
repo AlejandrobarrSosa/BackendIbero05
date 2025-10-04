@@ -14,7 +14,52 @@ var dirname = path.dirname(__filename);
 // global.PDFDocument = require("pdfkit")
 // global.fs = require("fs")
 // global.json2xls = require("json2xls")
+global.path = require("path")
+global.appRoot = path.resolve(__dirname)
 
+
+
+app.use((req, res, next) => {
+  const origin = req.headers.origin;
+
+  if (config.listablanca.includes(origin)) {
+    res.setHeader('Access-Control-Allow-Origin', origin);
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
+  }
+
+  res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+
+  // Opcional: responder a preflight directamente
+  if (req.method === 'OPTIONS') {
+    return res.sendStatus(204);
+  }
+
+  next();
+});
+
+
+require("./rutas.js")
+
+mongoose.connect("mongodb://127.0.0.1:27017/" + config.bd).then((respuesta) => {
+    console.log("Conexion correcta a Mongo")
+}).catch((error) => {
+    console.log(error)
+})
+
+
+app.use(cors({
+    origin: function(origin, callback){
+        console.log(origin)
+        if(!origin) return callback(null, true)
+        if(config.listablanca.indexOf(origin) === -1){
+            return callback("Error de Cors No hay permisos",false)
+        }
+        else{
+           return callback(null, true) 
+        }
+    }
+}))
 
 
 
@@ -43,48 +88,11 @@ app.use((req, res, next) => {
   next()
 })
 
-// CORS con paquete cors
-app.use(cors({
-  origin: function (origin, callback) {
-    console.log("Origen:", origin)
-    if (!origin) return callback(null, true)
-    if (config.listablanca.indexOf(origin) === -1) {
-      return callback("Error de Cors No hay permisos", false)
-    } else {
-      return callback(null, true)
-    }
-  },
-  credentials: true
-}))
-
-
-app.use('/', express.static(path.join(__dirname, 'dist/frontend/browser')));
-app.get(/.*/, (req, res) => {
-  res.sendFile(path.join(dirname, 'dist/frontend/browser/index.html'));
-});
-global.path = require("path")
-global.appRoot = path.resolve(__dirname)
-
-
-// -------------------- CONEXIÓN MONGO -------------------- //
-
-// mongoose.connect("mongodb://127.0.0.1:27017/" + config.bd).then((respuesta) => {
-//   console.log("Conexion correcta a Mongo")
-// }).catch((error) => {
-//   console.log(error)
-// })
-
-
 var conexion = "mongodb://" + config.bdIp + ":" + config.bdPort +  "/" + config.bd
 
 if(config.produccion == true){
   conexion = "mongodb://" + config.bdUser + ":" + config.bdPass + '@' + config.bdIp + ":" + config.bdPort +  "/" + config.bd
 }
-mongoose.connect(conexion).then((respuesta)=>{
-    console.log("Conexion correcta a mongo")
-}).catch((error) => {
-    console.log(error)
-})
 
 
 
@@ -110,8 +118,12 @@ mongoose.connect(conexion).then((respuesta)=>{
     rolling: true
   }))
 
-  // -------------------- RUTAS -------------------- //
-  require("./rutas.js")
+
+app.use('/', express.static(path.join(__dirname, 'dist/frontend/browser')));
+app.get(/.*/, (req, res) => {
+  res.sendFile(path.join(dirname, 'dist/frontend/browser/index.html'));
+});
+
 
   // -------------------- PARA LEVANTAR EL SERVIDOR -------------------- //
   app.listen(config.puerto, function () {

@@ -3,10 +3,15 @@ var config = {
 }
 
 config.name = "DieCastCars"
-config.dominio = "http://localhost:4200"
 
-config.bd = "BackendIbero05"
-config.bdtest = "Cohorte05FinalTest"
+
+config.dominio = "http://alejo.tutorialesjavascript.com"
+// config.dominio = "http://localhost:3000"
+
+
+
+config.bd = "Cohorte05Final"
+config.bdtest = "Cohorte05Final"
 config.bdUser = "adminBit"
 config.bdPass = "prueba123"
 config.bdIp = "134.199.238.248"
@@ -28,8 +33,11 @@ config.listablanca = [
     "http://localhost:4200",
     "http://localhost:3000",
     "http://192.168.20.26:3000",
-    "http://localhost:9876"
-    
+    "http://localhost:9876",
+    "http://134.199.238.248",
+    "http://alejo.tutorialesjavascript.com",
+    "http://134.199.238.248:3000"
+
     
 ]
 
