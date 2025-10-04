@@ -27,7 +27,7 @@ config.expiracion = 60000*5
 config.email.host = "smtp.gmail.com"
 config.email.port = 587
 config.email.user = "alejandrobarr.sosa@gmail.com"
-config.email.pass = "grdbsadfeiullfav"
+config.email.pass = "rowxkhcafnhgaqnz"
 
 config.listablanca = [
     "http://localhost:4200",

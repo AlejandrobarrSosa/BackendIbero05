@@ -278,8 +278,7 @@ usuariosController.Registrar = function (request, response) {
           const transporter = nodemailer.createTransport({
             host: config.email.host,
             port: config.email.port,
-            secure: true,
-            requireTLS: true,
+            secure: false,
             auth: {
               user: config.email.user,
               pass: config.email.pass,
