@@ -12,7 +12,7 @@ config.dominio = "http://alejo.tutorialesjavascript.com"
 
 config.bd = "BackendIbero05"
 config.bdtest = "Cohorte05Final"
-config.bdUser = "adminBit"
+config.bdUser = "adminroot"
 config.bdPass = "prueba123"
 config.bdIp = "134.199.238.248"
 config.bdPort = "27017"
