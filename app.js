@@ -41,7 +41,7 @@ app.use((req, res, next) => {
 
 require("./rutas.js")(app);
 
-mongoose.connect("mongodb://127.0.0.1:27017/" + config.bd).then((respuesta) => {
+mongoose.connect("mongodb://" + config.bdUser + ":" + config.bdPass + "@" + config.bdIp + ":" + config.bdPort + "/" + config.bd + "?authSource=admin&directConnection=true").then((respuesta) => {
     console.log("Conexion correcta a Mongo")
 }).catch((error) => {
     console.log(error)
@@ -103,8 +103,8 @@ if(config.produccion == true){
     saveUninitialized: true,
     store: MongoStore.create({
       // client: mongoose.connection.getClient(),
-      mongoUrl: conexion + "Sesiones",
-      dbName: config.bd + "Sesiones",
+      mongoUrl: conexion + "Sesiones?authSource=admin&directConnection=true",
+      dbName: config.bd + "Sesiones?authSource=admin&directConnection=true",
       collectionName: "Sessions",
       ttl: config.expiracion,
       // mongoOptions: {
